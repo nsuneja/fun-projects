@@ -1,0 +1,30 @@
+package plumgrid;
+
+message channel_info {
+	required string data_url=1;
+	required string control_url=2;
+}
+
+message control_msg {
+	
+	enum Type {
+		GET_CHANNELS=0;
+		JOIN_NOTIFICATION=1;
+		LEAVE_NOTIFICATION=2;
+	}
+
+	required Type type = 1;
+	optional channel_info channel = 2;
+}
+
+message channel_list {
+	repeated channel_info channel=1;
+}
+
+message ack {
+	required int32 placeholder=1;
+}
+
+message chat {
+	optional string contents=1;
+}

@@ -1,0 +1,56 @@
+GROUP CHAT CLIENT ARCHITECTURE
+
+The group chat client is architectured in a decentralized manner (execpt for the central redis database server).
+When each chat client comes up, it exposes 2 channels for other clients::
+
+1) control channel
+2) data channel
+
+Control channel is used to accept control messages from peer clients. The control channel is hosted in a req-resp pattern.
+These are the possible control messages:
+
+1) GET_CHANNEL_LIST:- returns the list of clients in your chat group.
+2) JOIN_NOTIFICATION:- A peer client just joined the chat group.
+3) LEAVE_NOTIFICATION:- A peer client just left the chat group.
+
+Each client creates a thread to accept control messages from other clients.
+
+Data channel is hosted in a pub-sub pattern. Each client publishes a chat message on the local data channel, and all the subscribed clients
+receive the chat message. This data channel is used primarily for chat message exchange.
+Each clients spawns one thread (for each subscribed channel), on which it listens for the incoming messages from other clients.
+
+NOTE: The entity of the client (in form of the client url), as exposed to the user is its control channel (NOT the data channel). The data channel is hidden from user's perspective.
+
+----------------------------------------------------------------------
+
+FUNCTIONALIES IMPLEMENTED::
+
+These are the functions available in the client:
+
+1) group messaging (via zeromq).
+2) join/leave notification.
+3) logging of messages to redis database.
+4) Use of google protobufs for serialization/deserialization of the messages.
+
+-----------------------------------------------------------------------
+
+LIST OF FILES:
+
+1) client.cpp - chat client implementation
+2) client.h - chat client header
+3) zmq.hpp - zeromq client for c++
+4) datatypes.proto - google protobuf script
+5) datatypes.pb.h - protobuf generated header
+6) datatypes.pb.cc - probufbuf generated source
+7) SimpleRedisClient.h - redis client for c++ (header)
+8) SimpleRedisClient.cpp - redis client for c++ (source)
+
+------------------------------------------------------------------------
+
+INSTALL INSTRUCTIONS
+refer to INSTALL document
+
+------------------------------------------------------------------------
+
+
+

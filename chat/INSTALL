@@ -1,0 +1,77 @@
+GROUP CHAT CLIENT INSTALLATION INSTRUCTIONS:
+
+-----------------------------------------------------------------------
+
+DEPENDENCY
+
+1) The client requires a redis database server running in the backend to log the chat messages.
+2) zeromq and protobuf packages are too big to package with the chat client classes. If these softwares
+   are available on the system where this chat client is run, use 'Makefile' . Otherwise, these 2 packages will have to be
+   installed in the work directory, as referred to in the 'Makefile2'.
+
+----------------------------------------------------------------------
+
+LIBARIES REQUIRED
+
+1) The system should have a g++ compiler with C++11 support. GCC 4.8.2 onwards
+
+------------------------------------------------------------------------
+
+LIMITATIONS
+
+1) Due to constrains of time, the error handling for incorrect input is limited. Kindly bear that in mind.
+2) In current implementation, the clients binds on the localhost. So, all the chat clients must run on the same host.
+   This limitation can be easily overcome by binding to an interface address on the machine.
+   Due to time constraints, I have left it undone.
+3) The window for sending the messages and receving the notifications/messages is the same.
+   So, the gui can look a bit cluttered, but all functionality is there.
+
+-----------------------------------------------------------------------------
+
+HOW TO RUN A CLIENT 
+1) Run 'make' in the local directory. This will produce the binary named "groupchat" in the local directory.
+
+2) Execute ./groupchat [<database-url>]
+   NOTE:
+   a) The database url should be in <ip-address>:<port> format
+   b) If the database url is not provided, the chat messages wont be logged.
+
+3) When the client runs, it displays the endpoint-url on which other clients can connect. Example::
+   
+   nishant@nishant-VirtualBox:~/plumgrid$ ./groupchat 
+   client endpoint::127.0.0.1:46838
+   WELCOME TO GROUP CHAT
+   $$ 
+
+   For eg., in this case the client endpoint is:: "127.0.0.1:46838". This complete URL should be used to join a group chat session.
+
+--------------------------------------------------------------------------
+
+HOW TO JOIN A CHAT GROUP
+
+1) Execute ./groupchat [<database-url>]
+
+2) At prompt, execute: <join> <peer-endpoint>. For eg: <join> 127.0.0.1:46838
+
+   NOTE: 
+   1) There should already be a client instance running with the specified endpoint url.
+
+----------------------------------------------------------------------
+
+LIST OF COMMANDS
+
+The following commands are available at the prompt:
+
+
+1)  <JOIN>, as described above.
+
+2)  <LEAVE>, to leave the chat group
+
+3)  <HELP>, to list out all the commands
+
+4)  <EXIT>, exits the chat client
+
+4)  Any other message on the prompt is interpreted as a chat message and published to the group.
+
+
+-------------------------------------------------------------------------------
